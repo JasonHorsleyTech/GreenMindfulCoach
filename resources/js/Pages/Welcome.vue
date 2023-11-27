@@ -62,7 +62,7 @@ function createScene(el: HTMLDivElement) {
     el.appendChild(renderer.domElement);
 
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load("images/textures/earth_2k.jpg"); // Replace with the path to your texture file
+    const texture = textureLoader.load("images/textures/earth_1k.jpg"); // Replace with the path to your texture file
 
     // Create a green sphere
     const geometry = new THREE.SphereGeometry(2, 256, 256);
