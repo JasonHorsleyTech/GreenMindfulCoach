@@ -1,0 +1,65 @@
+#pretty-markdown {
+
+    h1 {
+        img {
+            @apply h-12 w-12 m-0 #{!important};
+        }
+
+        @apply flex items-center gap-4 #{!important};
+    }
+
+    h2 {
+        @apply border-b border-gray-300 pb-4 #{!important};
+    }
+
+    h3 {
+        @apply border-t border-dashed border-gray-300 mt-4 pt-4 #{!important};
+    }
+
+    li::marker {
+        @apply text-[#3398DB] dark:text-white #{!important};
+    }
+
+    h3:first-of-type {
+        @apply border-t-0 mt-0 pt-0 #{!important};
+    }
+
+    blockquote {
+        @apply m-0 #{!important};
+    }
+
+    blockquote p {
+        @apply m-0 #{!important};
+    }
+
+    table {
+        @apply border bg-black/25 dark:bg-gray-500 shadow-lg rounded-lg overflow-hidden w-full #{!important};
+
+        thead {
+            @apply bg-gray-100 dark:bg-gray-700 #{!important};
+
+            tr {
+                @apply border-b-[2px] border-gray-400/50 dark:border-gray-500/50 #{!important};
+            }
+        }
+
+        tbody {
+            @apply bg-gray-100 dark:bg-gray-900 #{!important};
+        }
+
+        td,
+        th {
+            @apply border border-gray-300/50 dark:border-gray-700 px-4 py-2 #{!important};
+        }
+    }
+
+    .tight {
+        li {
+            @apply my-0 #{!important};
+
+            &>p {
+                @apply my-0 #{!important};
+            }
+        }
+    }
+}

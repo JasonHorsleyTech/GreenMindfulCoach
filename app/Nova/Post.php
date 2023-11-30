@@ -2,30 +2,32 @@
 
 namespace App\Nova;
 
+use App\Rules\MarkdownFile;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
-use Laravel\Nova\Fields\Gravatar;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\File;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Markdown;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Illuminate\Support\Str;
 
-class User extends Resource
+class Post extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\User>
+     * @var class-string<\App\Models\Post>
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\Post::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -33,7 +35,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id',
     ];
 
     /**
@@ -45,32 +47,24 @@ class User extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+            BelongsTo::make('Blog')
+                ->sortable()
+                ->rules('required'),
 
-            Gravatar::make()->maxWidth(50),
-
-            Text::make('Name')
+            Text::make('Title')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
+            Text::make('Slug')
+                ->hide()
+                ->creationRules('unique:posts,slug')
+                ->updateRules('unique:posts,slug,{{resourceId}}')
+                ->fillUsing(function ($request, $model, $attribute, $requestAttribute) {
+                    $model->{$attribute} = Str::slug($request->title);
+                }),
 
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', Rules\Password::defaults())
-                ->updateRules('nullable', Rules\Password::defaults()),
-
-            Boolean::make('Is Admin')
-                ->rules('required', 'boolean')
-                ->trueValue(1)
-                ->falseValue(0)
-                ->hideWhenUpdating(function ($request) {
-                    return $request->user()->id === $this->id;
-                })
+            Markdown::make('Content')
+                ->rules('required'),
         ];
     }
 

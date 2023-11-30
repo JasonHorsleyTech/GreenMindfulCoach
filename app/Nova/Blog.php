@@ -3,22 +3,24 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
-use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\File;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Markdown;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Illuminate\Support\Str;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Url;
 
-class User extends Resource
+class Blog extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\User>
+     * @var class-string<\App\Models\Blog>
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\Blog::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -33,7 +35,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id',
     ];
 
     /**
@@ -47,30 +49,41 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Gravatar::make()->maxWidth(50),
-
             Text::make('Name')
                 ->sortable()
-                ->rules('required', 'max:255'),
+                ->rules('required', 'max:255')
+                ->help('Keep it short! A word or two.'),
 
-            Text::make('Email')
+            Text::make('Slug')
+                ->hide()
+                ->creationRules('unique:blogs,slug')
+                ->updateRules('unique:blogs,slug,{{resourceId}}')
+                ->fillUsing(function ($request, $model, $attribute, $requestAttribute) {
+                    $model->{$attribute} = Str::slug($request->name);
+                }),
+
+            Number::make('Order')
                 ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
+                ->rules('required', 'max:255')
+                ->default(1)
+                ->help('Higher numbers will be displayed first.'),
 
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', Rules\Password::defaults())
-                ->updateRules('nullable', Rules\Password::defaults()),
+            Markdown::make('Description')
+                ->sortable()
+                ->rules('required')
+                ->help('A brief description of what the blog will be about.'),
 
-            Boolean::make('Is Admin')
-                ->rules('required', 'boolean')
-                ->trueValue(1)
-                ->falseValue(0)
-                ->hideWhenUpdating(function ($request) {
-                    return $request->user()->id === $this->id;
+            File::make('Photo', 'photo_url')
+                ->disk('public')
+                ->path('blogs')
+                ->storeAs(function (Request $request) {
+                    return $request->photo_url->getClientOriginalName();
                 })
+                ->prunable()
+                ->rules('required', 'image:png,webp')
+                ->help('A photo to represent the blog.'),
+
+            HasMany::make('Posts')
         ];
     }
 

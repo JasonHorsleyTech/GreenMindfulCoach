@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Head, Link } from "@inertiajs/vue3";
-import { onMounted, ref } from "vue";
-import * as THREE from "three";
+import DefaultLayout from "@/Layouts/DefaultLayout.vue";
+import { Head, usePage } from "@inertiajs/vue3";
+import { onMounted, ref, watch } from "vue";
 
 defineProps({
     canLogin: Boolean,
@@ -17,6 +17,7 @@ type Session = {
     calendly: string;
     price: number;
 };
+
 const sessions = ref<Session[]>([
     {
         title: "30 Minute Session",
@@ -44,144 +45,103 @@ const sessions = ref<Session[]>([
     },
 ]);
 
-const threeSceenRef = ref<HTMLDivElement | null>(null);
-
-function createScene(el: HTMLDivElement) {
-    // Create the scene, camera, and renderer
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        10000
-    );
-    const renderer = new THREE.WebGLRenderer({ alpha: true }); // alpha: true makes the background transparent
-
-    // Set the size of the renderer and add it to the DOM
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    el.appendChild(renderer.domElement);
-
-    const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load("images/textures/earth_1k.jpg"); // Replace with the path to your texture file
-
-    // Create a green sphere
-    const geometry = new THREE.SphereGeometry(2, 256, 256);
-    const material = new THREE.MeshBasicMaterial({ map: texture }); // Green color
-    const sphere = new THREE.Mesh(geometry, material);
-    scene.add(sphere);
-
-    // Position the camera
-    camera.position.z = 5;
-
-    // Position the sphere
-    sphere.position.x = -2;
-    sphere.position.y = -2;
-
-    // Animation function
-    function animate() {
-        requestAnimationFrame(animate);
-
-        // Rotate the sphere
-        sphere.rotation.x += 0.0005;
-        sphere.rotation.y += 0.001;
-
-        // Render the scene
-        renderer.render(scene, camera);
-    }
-
-    // Start the animation loop
-    animate();
-
-    // Handle window resize
-    window.addEventListener(
-        "resize",
-        () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        },
-        false
-    );
-}
-
+const sessionElement = ref<HTMLElement | null>(null);
 onMounted(() => {
-    if (!threeSceenRef.value) return;
-    createScene(threeSceenRef.value);
+    if (!sessionElement.value) return;
+    sessionElement.value.scrollIntoView({ behavior: "smooth" });
 });
 </script>
 
 <template>
     <Head title="Welcome" />
 
-    <div class="flex flex-col flex-nowrap min-h-[100vh] bg-gray-100">
-        <header
-            class="grid place-content-center text-center p-6 bg-green-800 text-green-100"
-        >
-            <div class="mx-auto flex items-center gap-4">
-                <img
-                    src="/images/logo.webp"
-                    alt="Health Coaching Logo"
-                    class="h-20 w-20 rounded-full overflow-hidden shadow-xl"
-                />
-                <div>
-                    <h1 class="text-4xl font-bold">Celeste Horsley</h1>
-                    <p class="text-xl">RN & Plant-Based Certified</p>
-                </div>
-            </div>
-        </header>
-
-        <div class="grow pb-16 px-4 relative overflow-hidden">
+    <DefaultLayout>
+        <div class="relative w-full">
+            <img class="mx-auto" src="/images/food.png" />
             <div
-                class="absolute bottom-0 left-0 opacity-50"
-                ref="threeSceenRef"
-            />
-            <div class="grid gap-4 max-w-5xl mx-auto z-20 relative">
-                <section class="border-b mb-6 border-green-800 py-6">
-                    <h2 class="text-3xl font-bold md:text-center">
-                        Embrace a Holistic Approach to Wellness
-                    </h2>
-                    <p class="text-lg mt-4">
-                        With over 25 years of experience in healthcare, I bring
-                        a deep understanding of the interconnectedness of diet,
-                        lifestyle, and health. My approach is collaborative and
-                        tailored to your unique needs, empowering you to make
-                        sustainable changes for improved wellness.
-                    </p>
+                class="absolute grid place-content-center sm:gap-3 lg:gap-8 overflow-hidden w-[35%] aspect-square left-1/2 top-1/2 translate-x-[-42%] translate-y-[-55%] rounded-full text-white text-center p-4 bg-[#2b6e54]/90"
+            >
+                <h2 class="px-3 text-xl sm:text-3xl md:text-3xl lg:text-5xl">
+                    Plant based healing
+                </h2>
+                <p class="hidden md:block px-3 text-sm md:text-lg">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-[#2b6e54]">
+            <div class="h-24 w-full bg-gradient-to-b from-white to-[#2b6e54]" />
+            <div class="max-w-5xl mx-auto px-4 pb-16 text-white text-lg">
+                <section>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    efficitur gravida enim, eget euismod erat tincidunt in.
+                    Praesent non pretium nunc. Nunc tempus mattis diam, sit amet
+                    semper mi vestibulum sit amet. Fusce sed elementum sem.
+                    Proin dictum, risus maximus euismod accumsan, tortor mi
+                    dignissim ex, quis condimentum ligula arcu vitae nisi. Cras
+                    at magna et lectus volutpat vestibulum. Morbi fringilla sit
+                    amet mauris non pulvinar. Vivamus tincidunt augue metus, a
+                    viverra est interdum non. Cras sed eros lacus. Morbi
+                    pharetra dui sed ligula pulvinar, id maximus ligula
+                    consequat. Pellentesque congue lacus lacus, a facilisis diam
+                    fringilla eu. Pellentesque non neque auctor, dictum diam
+                    accumsan, rutrum nulla. Nullam felis nisl, tempor ac est ac,
+                    lobortis egestas sem. Aliquam ut pulvinar neque. Duis a
+                    lacinia turpis, a tempor orci. Etiam in iaculis mauris. Sed
+                    quis dolor ipsum. Suspendisse ac sem nisi. In hac habitasse
+                    platea dictumst. Phasellus sem ipsum, vestibulum nec quam
+                    vel, sodales laoreet lectus. Fusce auctor nibh enim, vel
+                    aliquam orci bibendum sed. Etiam ultricies arcu nisi,
+                    feugiat laoreet velit molestie pretium. Quisque malesuada
+                    ultrices nibh et pharetra. Curabitur sagittis justo nisi,
+                    vel tincidunt eros tincidunt et. Etiam lacinia sit amet
+                    dolor ut laoreet. Suspendisse pellentesque euismod metus, eu
+                    varius nisi interdum ut. Cras quis semper est, sed
+                    scelerisque lacus. In maximus, metus eget sollicitudin
+                    convallis, quam purus aliquam massa, eget suscipit urna
+                    tortor id mauris. Vivamus mattis neque in fermentum tempus.
+                    Sed dapibus dignissim lacus vel scelerisque. Cras mollis
+                    justo vel sodales viverra. Vestibulum ante ipsum primis in
+                    faucibus orci luctus et ultrices posuere cubilia curae; Nam
+                    hendrerit odio quis consequat fringilla. Vestibulum eget
+                    pretium justo. Ut at dignissim velit, ac pellentesque odio.
+                    Donec augue odio, lacinia ut tristique eget, elementum ac
+                    felis. Fusce tempus nec mi in dignissim. Mauris ultrices ex
+                    a viverra congue. Aenean ornare, felis id lacinia vulputate,
+                    erat odio congue nibh, eget pretium velit risus at ex.
+                    Vestibulum hendrerit mauris eu ex tincidunt, dignissim
+                    efficitur sapien varius. Maecenas risus enim, dapibus mollis
+                    ipsum vel, consequat congue erat. Morbi laoreet id dui
+                    dictum hendrerit. Maecenas sed maximus massa. Praesent nec
+                    convallis leo. Aenean non hendrerit mauris, in fermentum
+                    augue. Pellentesque porttitor sem felis, sed imperdiet neque
+                    ultricies in. Vestibulum dui nibh, rutrum a magna vel,
+                    facilisis rhoncus neque. Vestibulum ante ipsum primis in
+                    faucibus orci luctus et ultrices posuere cubilia curae;
+                    Aenean blandit, ex et tristique vulputate, eros mi dictum
+                    mauris, vitae aliquam ante magna in dui. Ut eleifend nisi
+                    eros, vel placerat nibh interdum eu. Phasellus eget cursus
+                    risus. Pellentesque volutpat consectetur ipsum et tincidunt.
+                    Suspendisse venenatis lacus sapien, et sollicitudin nisl
+                    interdum vel. Praesent tristique luctus dolor auctor
+                    vestibulum. Praesent vestibulum quam eros, a interdum eros
+                    efficitur vitae. Aenean tristique libero id magna tempus
+                    tincidunt.
                 </section>
 
-                <section class="border-b mb-6 border-green-800 py-6">
-                    <h2 class="text-3xl font-bold md:text-center">
-                        The Power of Plant-Based Nutrition
-                    </h2>
-                    <p class="text-lg mt-4">
-                        As a certified expert in plant-based nutrition, I guide
-                        you through the transformative journey of adopting a
-                        diet rich in vegetables and whole foods. Discover the
-                        health benefits and experience a newfound vitality with
-                        mindful eating.
-                    </p>
-                </section>
-
-                <section class="border-b mb-6 border-green-800 py-6">
-                    <h2 class="text-3xl font-bold md:text-center">
-                        Mindfulness & Well-Being
-                    </h2>
-                    <p class="text-lg mt-4">
-                        Integrating mindfulness into daily life enhances overall
-                        well-being. I offer strategies and practices that help
-                        you cultivate a mindful approach to health and life,
-                        fostering balance and inner peace.
-                    </p>
-                </section>
-
-                <section class="py-6 grid md:grid-cols-3 gap-8 md:text-center">
+                <!-- This is the #services section -->
+                <section
+                    ref="sessionElement"
+                    class="py-6 grid md:grid-cols-3 gap-8 md:text-center"
+                >
                     <h2 class="text-3xl font-bold col-span-full">
                         Book a session
                     </h2>
                     <a
                         v-for="session in sessions"
                         :key="session.title"
-                        class="mx-auto p-4 grid grid-cols-3 md:grid-cols-1 items-start gap-4 bg-white border-2 border-green-700 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all cursor-pointer group"
+                        class="mx-auto p-4 grid grid-cols-3 md:grid-cols-1 items-start gap-4 bg-white border-2 border-green-700 rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all cursor-pointer group text-[#2b6e54]"
                         :href="session.calendly"
                     >
                         <div class="col-span-1 grid place-content-center">
@@ -204,34 +164,13 @@ onMounted(() => {
                         <div
                             class="col-span-full md:min-h-[200px] flex items-end"
                         >
-                            <p class="text-lg">{{ session.description }}</p>
+                            <p class="text-lg">
+                                {{ session.description }}
+                            </p>
                         </div>
                     </a>
                 </section>
             </div>
         </div>
-
-        <footer
-            class="grid items-center text-center p-6 bg-green-800 text-green-100"
-        >
-            <h2 class="text-3xl font-bold">Get in Touch</h2>
-            <p class="text-lg mt-4">
-                Ready to start your journey to better health?
-                <a href=""> Contact me for a consultation. </a>
-            </p>
-            <p class="flex gap-1 mx-auto">
-                <a href="mailto:celeste@greenmindfulcoach.com">
-                    celeste@greenmindfulcoach.com
-                </a>
-                <span>|</span>
-                <a href="tel:7735468672" class="text-lg">(773) 546-8672</a>
-            </p>
-        </footer>
-    </div>
+    </DefaultLayout>
 </template>
-
-<style lang="scss" scoped>
-footer a {
-    @apply text-blue-200 hover:underline;
-}
-</style>
