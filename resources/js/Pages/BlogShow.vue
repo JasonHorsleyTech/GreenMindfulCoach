@@ -43,7 +43,7 @@ const props = defineProps<{
         <div class="w-full border-b pb-4 mb-4" />
 
         <div
-            class="px-4 grid md:grid-cols-3 gap-4 lg:gap-12 place-content-center"
+            class="px-4 pb-12 grid md:grid-cols-3 gap-4 lg:gap-12 place-content-center"
         >
             <Link
                 v-for="post in posts"

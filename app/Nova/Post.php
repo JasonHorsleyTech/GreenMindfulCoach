@@ -13,6 +13,7 @@ use Laravel\Nova\Fields\Markdown;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Textarea;
 
 class Post extends Resource
 {
@@ -52,9 +53,13 @@ class Post extends Resource
                 ->sortable()
                 ->rules('required'),
 
-            Text::make('Title')
+            Text::make('Post title', 'title')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            Textarea::make('Post description', 'description')
+                ->sortable()
+                ->rules('required', 'max:2550'),
 
             Text::make('Slug')
                 ->hide()
@@ -77,7 +82,7 @@ class Post extends Resource
                     return $request->photo_url->getClientOriginalName();
                 })
                 ->prunable()
-                ->rules('required', 'image:png,webp')
+                ->rules('image:png,webp')
                 ->help('Image to go with the post.'),
 
             Markdown::make('Content')

@@ -42,13 +42,27 @@ class PostController extends Controller
     public function show(Blog $blog, Post $post)
     {
         $nextPost = Post::where('blog_id', $blog->id)
-            ->where('order', '>', $post->order)
+            ->where(function ($query) use ($post) {
+                $query->where('order', '>', $post->order)
+                    ->orWhere(function ($subQuery) use ($post) {
+                        $subQuery->where('order', $post->order)
+                            ->where('created_at', '>', $post->created_at);
+                    });
+            })
             ->orderBy('order', 'asc')
+            ->orderBy('created_at', 'asc')
             ->first();
 
         $previousPost = Post::where('blog_id', $blog->id)
-            ->where('order', '<', $post->order)
+            ->where(function ($query) use ($post) {
+                $query->where('order', '<', $post->order)
+                    ->orWhere(function ($subQuery) use ($post) {
+                        $subQuery->where('order', $post->order)
+                            ->where('created_at', '<', $post->created_at);
+                    });
+            })
             ->orderBy('order', 'desc')
+            ->orderBy('created_at', 'desc')
             ->first();
 
         return Inertia::render('PostShow', [

@@ -68,7 +68,7 @@ class Blog extends Resource
                 ->default(1)
                 ->help('Higher numbers will be displayed first.'),
 
-            Markdown::make('Description')
+            Text::make('Description')
                 ->sortable()
                 ->rules('required')
                 ->help('3-5 sentences'),
@@ -80,7 +80,7 @@ class Blog extends Resource
                     return $request->photo_url->getClientOriginalName();
                 })
                 ->prunable()
-                ->rules('required', 'image:png,webp')
+                ->rules('image:png,webp')
                 ->help('Displayed inside "card", on the "list of all blogs" page.'),
 
             File::make('Background photo', 'background_photo_url')
@@ -90,7 +90,7 @@ class Blog extends Resource
                     return $request->background_photo_url->getClientOriginalName();
                 })
                 ->prunable()
-                ->rules('required', 'image:png,webp')
+                ->rules('image:png,webp')
                 ->help('Displayed as background, on the "list of all blog *posts*" page.'),
 
             HasMany::make('Posts')
