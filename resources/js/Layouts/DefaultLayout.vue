@@ -87,14 +87,14 @@ const isAdmin = computed(() => props.auth.user?.is_admin ?? false);
                             </Link>
 
                             <Link
-                                v-if="isLoggedIn"
+                                v-if="isAdmin"
                                 href="/nova"
                                 class="p-3 hover:font-bold cursor-pointer"
                             >
                                 Admin panel
                             </Link>
                             <Link
-                                v-if="isAdmin"
+                                v-if="isLoggedIn"
                                 href="/logout"
                                 class="p-3 hover:font-bold cursor-pointer"
                             >
