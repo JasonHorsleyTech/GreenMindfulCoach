@@ -4,6 +4,26 @@ import { computed, ref } from "vue";
 import WrappedLink from "@/Components/WrappedLink.vue";
 
 const burgerOpen = ref(false);
+
+type User = {
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at: string;
+    current_team_id: number;
+    profile_photo_path: string;
+    created_at: string;
+    updated_at: string;
+    is_admin: boolean;
+    two_factor_enabled: boolean;
+    two_factor_confirmed_at: string;
+    profile_photo_url: string;
+};
+
+const { props } = usePage() as { props: { auth: { user: User | null } } };
+
+const isLoggedIn = computed(() => !!props.auth.user);
+const isAdmin = computed(() => props.auth.user?.is_admin ?? false);
 </script>
 <template>
     <div class="flex flex-col flex-nowrap min-h-[100vh] font-montserrat">
@@ -61,22 +81,40 @@ const burgerOpen = ref(false);
                             </Link>
                             <Link
                                 href="/blogs"
-                                class="p-3 hover:font-bold cursor-pointer"
-                                >Blogs</Link
+                                class="border-b p-3 hover:font-bold cursor-pointer"
                             >
+                                Blogs
+                            </Link>
 
                             <Link
-                                href="/login"
+                                v-if="isLoggedIn"
+                                href="/nova"
                                 class="p-3 hover:font-bold cursor-pointer"
                             >
-                                Log in
+                                Admin panel
                             </Link>
                             <Link
-                                href="/register"
+                                v-if="isAdmin"
+                                href="/logout"
                                 class="p-3 hover:font-bold cursor-pointer"
                             >
-                                Sign up
+                                Log out
                             </Link>
+
+                            <template v-if="!isLoggedIn">
+                                <Link
+                                    href="/login"
+                                    class="p-3 hover:font-bold cursor-pointer"
+                                >
+                                    Log in
+                                </Link>
+                                <Link
+                                    href="/register"
+                                    class="p-3 hover:font-bold cursor-pointer"
+                                >
+                                    Sign up
+                                </Link>
+                            </template>
                         </ul>
                         <div
                             @click="burgerOpen = !burgerOpen"

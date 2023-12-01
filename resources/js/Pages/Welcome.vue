@@ -53,7 +53,6 @@ onMounted(() => {
     if (!element) return;
 
     setTimeout(() => {
-        console.log(hash, element);
         element.scrollIntoView({ behavior: "smooth" });
     }, 500)
 });
