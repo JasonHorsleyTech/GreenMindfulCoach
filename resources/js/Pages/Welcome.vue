@@ -65,12 +65,12 @@ onMounted(() => {
         <div class="relative w-full">
             <img class="mx-auto" src="/images/food.png" />
             <div
-                class="absolute grid place-content-center sm:gap-3 lg:gap-8 overflow-hidden w-[35%] aspect-square left-1/2 top-1/2 translate-x-[-42%] translate-y-[-55%] rounded-full text-white text-center p-4 bg-[#2b6e54]/90"
+                class="absolute grid place-content-center sm:gap-3 lg:gap-8 overflow-hidden w-[35%] aspect-square left-1/2 top-1/2 translate-x-[-42%] translate-y-[-55%] rounded-full text-white text-center bg-[#2b6e54]/90"
             >
-                <h2 class="px-3 text-xl sm:text-3xl md:text-3xl lg:text-5xl">
+                <h2 class="px-3 md:px-5 text-xl sm:text-3xl md:text-3xl lg:text-5xl">
                     Plant based healing
                 </h2>
-                <p class="hidden md:block px-3 text-sm md:text-lg">
+                <p class="hidden md:block px-3 md:px-5 text-sm md:text-lg">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </p>
             </div>
