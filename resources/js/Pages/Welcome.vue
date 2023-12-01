@@ -45,10 +45,17 @@ const sessions = ref<Session[]>([
     },
 ]);
 
-const sessionElement = ref<HTMLElement | null>(null);
 onMounted(() => {
-    if (!sessionElement.value) return;
-    sessionElement.value.scrollIntoView({ behavior: "smooth" });
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const element = document.querySelector(hash);
+    if (!element) return;
+
+    setTimeout(() => {
+        console.log(hash, element);
+        element.scrollIntoView({ behavior: "smooth" });
+    }, 500)
 });
 </script>
 
@@ -130,9 +137,8 @@ onMounted(() => {
                     tincidunt.
                 </section>
 
-                <!-- This is the #services section -->
                 <section
-                    ref="sessionElement"
+                    id="services"
                     class="py-6 grid md:grid-cols-3 gap-8 md:text-center"
                 >
                     <h2 class="text-3xl font-bold col-span-full">

@@ -6,22 +6,27 @@ const routes = {
     home: {
         href: "/",
         text: "Home",
+        component: Link,
     },
     services: {
         href: "/#services",
         text: "Services",
+        component: "a",
     },
     blogs: {
         href: "/blogs",
         text: "Blogs",
+        component: Link,
     },
     login: {
         href: "/login",
         text: "Log in",
+        component: Link,
     },
     register: {
         href: "/register",
         text: "Sign up",
+        component: Link,
     },
 };
 
@@ -45,6 +50,10 @@ const text = computed(() => {
     return routes[props.routeName].text;
 });
 
+const linkComponent = computed(() => {
+    return routes[props.routeName].component;
+});
+
 const page = usePage();
 const isActive = computed(() => {
     const routeUrl = href.value;
@@ -54,9 +63,11 @@ const isActive = computed(() => {
 </script>
 
 <template>
-    <Link
+    <component
+        :is="linkComponent"
         :href="href"
         :class="[isActive ? activeClass : inactiveClass]"
+        replace
         v-text="text"
     />
 </template>

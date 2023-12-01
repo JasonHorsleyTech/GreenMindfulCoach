@@ -11,22 +11,33 @@ const burgerOpen = ref(false);
             <div
                 class="mx-auto max-w-5xl flex flex-nowrap gap-4 items-center py-4"
             >
-                <div class="h-14 w-14 rounded-[15%] overflow-hidden shrink-0">
+                <Link
+                    href="/"
+                    class="h-14 w-14 rounded-[15%] overflow-hidden shrink-0"
+                >
                     <img
                         class="scale-[105%]"
                         src="/images/logos/minimal.png"
                         alt="Green Mindful Coach"
                     />
-                </div>
+                </Link>
 
                 <div class="grow grid place-content-center">
                     <ul
                         class="hidden md:flex flex-nowrap place-content-center text-center rounded-full bg-white shadow-xl"
                     >
-                        <WrappedLink routeName="home" class="w-24 py-2 hover:font-bold cursor-pointer transition-all" />
-                        <WrappedLink routeName="services" class="w-24 py-2 hover:font-bold cursor-pointer transition-all" />
-                        <WrappedLink routeName="blogs" class="w-24 py-2 hover:font-bold cursor-pointer transition-all" />
-
+                        <WrappedLink
+                            routeName="home"
+                            class="w-24 py-2 hover:font-bold cursor-pointer transition-all"
+                        />
+                        <WrappedLink
+                            routeName="services"
+                            class="w-24 py-2 hover:font-bold cursor-pointer transition-all"
+                        />
+                        <WrappedLink
+                            routeName="blogs"
+                            class="w-24 py-2 hover:font-bold cursor-pointer transition-all"
+                        />
                     </ul>
                 </div>
 
