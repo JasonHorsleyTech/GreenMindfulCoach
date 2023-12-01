@@ -16,7 +16,7 @@ const props = defineProps<{
     <DefaultLayout class="bg-[#fff7f1]">
         <div
             class="bg-cover bg-center bg-no-repeat py-12 md:pb-24"
-            :style="`background-image: url(${blog.background_photo})`"
+            :style="`background-image: url('${blog.background_photo}')`"
         >
             <div class="mx-auto max-w-6xl px-4 grid md:grid-cols-3 bg-cover">
                 <div

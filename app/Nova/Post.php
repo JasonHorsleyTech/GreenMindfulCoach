@@ -12,6 +12,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Markdown;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Illuminate\Support\Str;
+use Laravel\Nova\Fields\Number;
 
 class Post extends Resource
 {
@@ -62,6 +63,22 @@ class Post extends Resource
                 ->fillUsing(function ($request, $model, $attribute, $requestAttribute) {
                     $model->{$attribute} = Str::slug($request->title);
                 }),
+
+            Number::make('Order')
+                ->sortable()
+                ->rules('required', 'max:255')
+                ->default(1)
+                ->help('Higher numbers will be displayed first.'),
+
+            File::make('Card photo', 'photo_url')
+                ->disk('public')
+                ->path('blogs')
+                ->storeAs(function (Request $request) {
+                    return $request->photo_url->getClientOriginalName();
+                })
+                ->prunable()
+                ->rules('required', 'image:png,webp')
+                ->help('Image to go with the post.'),
 
             Markdown::make('Content')
                 ->rules('required'),

@@ -52,7 +52,7 @@ class Blog extends Resource
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255')
-                ->help('Keep it short! A word or two.'),
+                ->help('3-5 words'),
 
             Text::make('Slug')
                 ->hide()
@@ -71,9 +71,9 @@ class Blog extends Resource
             Markdown::make('Description')
                 ->sortable()
                 ->rules('required')
-                ->help('A brief description of what the blog will be about.'),
+                ->help('3-5 sentences'),
 
-            File::make('Photo', 'photo_url')
+            File::make('Card photo', 'photo_url')
                 ->disk('public')
                 ->path('blogs')
                 ->storeAs(function (Request $request) {
@@ -81,7 +81,17 @@ class Blog extends Resource
                 })
                 ->prunable()
                 ->rules('required', 'image:png,webp')
-                ->help('A photo to represent the blog.'),
+                ->help('Displayed inside "card", on the "list of all blogs" page.'),
+
+            File::make('Background photo', 'background_photo_url')
+                ->disk('public')
+                ->path('blogs')
+                ->storeAs(function (Request $request) {
+                    return $request->background_photo_url->getClientOriginalName();
+                })
+                ->prunable()
+                ->rules('required', 'image:png,webp')
+                ->help('Displayed as background, on the "list of all blog *posts*" page.'),
 
             HasMany::make('Posts')
         ];
